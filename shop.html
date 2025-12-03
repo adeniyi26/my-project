@@ -1,0 +1,986 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Food Shop Grid</title>
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg: #ffffff;
+      --muted: #9aa0a6;
+      --accent: #f6a623;
+      --accent-dark: #d98a12;
+      --card-shadow: 0 6px 18px rgba(10,10,10,0.06);
+      --border: #eee;
+      --text: #222;
+      --sidebar-width: 300px;
+      --gap: 26px;
+      --page-max: 1160px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:"Montserrat",system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;
+      color:var(--text);
+      background:#fbfbfb;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.35;
+    }
+
+    /* Page container */
+    .page {
+      max-width: var(--page-max);
+      margin: 28px auto;
+      padding: 0 22px 60px;
+    }
+
+    h2.page-title {
+      font-size:20px;
+      margin-bottom:10px;
+      font-weight:700;
+    }
+
+    /* Top controls */
+    .controls {
+      display:flex;
+      gap:18px;
+      align-items:center;
+      margin-bottom:18px;
+      justify-content:flex-start;
+      flex-wrap:wrap;
+    }
+    .controls .control {
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-size:14px;
+      color:var(--muted);
+    }
+    .controls select, .controls button {
+      min-width:160px;
+      padding:8px 10px;
+      border-radius:6px;
+      border:1px solid var(--border);
+      background:white;
+      font-size:14px;
+      cursor:pointer;
+    }
+
+    /* Layout grid: main + sidebar */
+    .layout {
+      display:grid;
+      grid-template-columns: 1fr var(--sidebar-width); /* content on left, sidebar right */
+      gap: var(--gap);
+      align-items:start;
+    }
+
+    /* Product area: ALWAYS 3 columns on desktop/laptop */
+    .products {
+      display:grid;
+      grid-template-columns: repeat(3, 1fr); /* fixed 3 columns on desktop */
+      gap: 22px;
+    }
+
+    /* Single product card */
+    .card {
+      background: white;
+      border-radius:8px;
+      overflow:hidden;
+      box-shadow: var(--card-shadow);
+      border:1px solid #fafafa;
+      display:flex;
+      flex-direction:column;
+      height:100%;
+    }
+
+    .card .media {
+      width:100%;
+      padding-top: 70%; /* aspect ratio */
+      position:relative;
+      overflow:hidden;
+      background:#f3f3f3;
+    }
+    .card .media img{
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+
+    .badge {
+      position:absolute;
+      left:10px;
+      top:10px;
+      background:var(--accent);
+      color:white;
+      font-size:12px;
+      font-weight:700;
+      padding:6px 8px;
+      border-radius:4px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    }
+
+    .card .info {
+      padding:12px 14px;
+      font-size:14px;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      margin-top:auto;
+    }
+    .card .title {
+      margin:0 0 0 0;
+      font-weight:600;
+      color: #222;
+      font-size:15px;
+    }
+    .card .price-row {
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-size:13px;
+      color:var(--accent-dark);
+      font-weight:700;
+    }
+    .price-row .old {
+      color:var(--muted);
+      text-decoration:line-through;
+      font-weight:500;
+      font-size:13px;
+    }
+
+    /* Action icons overlay (small circular icons) */
+    .media-overlay {
+      position:absolute;
+      right:10px;
+      bottom:10px;
+      display:flex;
+      gap:8px;
+      z-index:2;
+      opacity:0;
+      transition: opacity .18s ease;
+    }
+    .card:hover .media-overlay { opacity:1; }
+    .media-overlay button {
+      width:36px;
+      height:36px;
+      border-radius:50%;
+      border:0;
+      background:rgba(255,255,255,0.92);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      box-shadow:0 6px 14px rgba(0,0,0,0.06);
+      cursor:pointer;
+      font-size:14px;
+    }
+
+    /* Sidebar styling */
+    aside.sidebar {
+      position:relative;
+      padding:18px;
+      border-left:1px solid var(--border);
+      background: #fff;
+      border-radius:8px;
+      height: fit-content;
+    }
+    .search {
+      display:flex;
+      gap:8px;
+      margin-bottom:18px;
+    }
+    .search input{
+      flex:1;
+      padding:10px 12px;
+      border:1px solid var(--border);
+      border-radius:6px;
+      font-size:14px;
+    }
+    .search button{
+      padding:10px 12px;
+      border-radius:6px;
+      border:0;
+      background:var(--accent);
+      color:white;
+      cursor:pointer;
+      font-weight:700;
+    }
+
+    .widget {
+      margin-bottom:16px;
+    }
+    .widget h4 {
+      margin:0 0 10px 0;
+      font-size:14px;
+      color:#222;
+    }
+
+    .categories label {
+      display:flex;
+      align-items:center;
+      gap:8px;
+      margin-bottom:8px;
+      font-size:14px;
+      color:var(--muted);
+    }
+
+    .ad-card{
+      background: linear-gradient(180deg, #1f2b2a 0%, #10231f 100%);
+      color:white;
+      padding:12px;
+      border-radius:6px;
+      display:flex;
+      gap:10px;
+      align-items:center;
+      margin-bottom:12px;
+    }
+    .ad-card img{
+      width:70px;
+      height:70px;
+      object-fit:cover;
+      border-radius:6px;
+    }
+
+    /* Price filter (static visual) */
+    .price-range {
+      font-size:13px;
+      color:var(--muted);
+      margin-top:6px;
+    }
+
+    /* Latest products list */
+    .latest-item {
+      display:flex;
+      gap:10px;
+      align-items:center;
+      margin-bottom:12px;
+    }
+    .latest-item img{
+      width:64px;height:56px;object-fit:cover;border-radius:4px;
+    }
+    .latest-item .meta{
+      font-size:13px;
+      color:var(--muted);
+    }
+    .latest-item .meta .name{color:#222;font-weight:600;font-size:13px}
+
+    /* Tags */
+    .tags {
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+    .tags .tag{
+      padding:6px 8px;
+      border-radius:20px;
+      background:#f6f6f6;
+      font-size:13px;
+      color:var(--muted);
+      border:1px solid #fafafa;
+      cursor:pointer;
+    }
+
+    /* Pagination */
+    .pagination {
+      display:flex;
+      gap:8px;
+      align-items:center;
+      justify-content:center;
+      margin:28px 0 80px;
+    }
+    .pagination button{
+      min-width:34px;
+      height:34px;
+      border-radius:6px;
+      border:1px solid #eee;
+      background:white;
+      cursor:pointer;
+    }
+    .pagination button.active {
+      background:var(--accent);
+      color:white;
+      border-color:var(--accent);
+      font-weight:700;
+    }
+
+    /* Small helper for price color on regular cards */
+    .price-normal {
+      color:var(--accent-dark);
+      font-weight:700;
+      font-size:14px;
+    }
+
+    /* Grid card repeated layout like screenshot: some cards show old price */
+    .muted {
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    /* -------- Support Section -------- */
+.support {
+    text-align: center;
+    padding: 50px 20px;
+    border-bottom: 1px solid #444;
+    background: #0c0c0c;
+    display: flex;
+}
+
+.support h2 {
+    font-size: 28px;
+    color: white;
+}
+
+.support h2 span {
+    color: orange;
+}
+
+.support p {
+    margin-top: 10px;
+    color: #ccc;
+    
+}
+
+.subscribe-box {
+    display: inline-flex;
+    width: 380px;
+    max-width: 100%;
+}
+
+.subscribe-box input {
+    width: 70%;
+    padding: 12px;
+    border: none;
+    outline: none;
+    background: orange;
+}
+
+.subscribe-box button {
+    width: 30%;
+    background: white;
+    border: none;
+    border-radius: 5px;
+    color: orange;
+    cursor: pointer;
+}
+
+
+/* -------- Footer Section -------- */
+.footer {
+    background: #0c0c0c;
+    padding: 50px 30px;
+}
+
+.footer-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 40px;
+}
+
+.footer-box h3 {
+    color: white;
+    margin-bottom: 15px;
+}
+
+.footer-box ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-box ul li {
+    margin: 8px 0;
+    color: #ccc;
+    cursor: pointer;
+}
+
+.footer-box p {
+    color: #bbb;
+}
+
+.opening {
+    display: flex;
+    margin-top: 20px;
+    background: #222;
+    padding: 12px;
+    border-left: 6px solid orange;
+}
+
+.opening .icon {
+    font-size: 24px;
+    margin-right: 10px;
+    color: orange;
+}
+.icon .strong{
+    color: white;
+}
+
+/* Recent Post */
+.post {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+/* .post .thumb {
+    width: 45px;
+    height: 45px;
+    background: #555;
+    margin-right: 12px;
+} */
+.post img{
+    width: 55px;
+    height: 55px;
+    object-fit: cover;
+    margin-right: 12px;
+}
+.post p {
+    margin: 0;
+    color: white;
+}
+
+.post span {
+    color: #aaa;
+    font-size: 12px;
+}
+
+/* Bottom */
+.footer-bottom {
+    margin-top: 40px;
+    border-top: 1px solid #333;
+    padding-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.footer-bottom p {
+    color: #d4d3d3;
+    font-size: 14px;
+}
+
+.social-icons span {
+    margin: 0 8px;
+    font-size: 22px;
+    cursor: pointer;
+}
+
+    /* Responsive - KEEP 3 columns on desktop & laptops (all sizes) — collapse to 1 column only below 480px */
+    @media (max-width: 1200px) {
+      .page { max-width: 1000px; }
+    }
+
+    @media (max-width: 1024px) {
+      .page { max-width: 960px; }
+      /* DO NOT change products grid here — keep 3 columns */
+      /* Sidebar remains on right until mobile */
+    }
+
+    @media (max-width: 768px) {
+      .page { margin: 18px auto; padding: 0 14px; }
+      /* keep the two-column layout but allow layout to stack if needed on very narrow tablets: we'll keep sidebar right unless viewport <=480 */
+      /* Important: still keep 3 columns for products at these sizes as requested */
+    }
+
+    @media (max-width: 480px) {
+      /* Mobile: stack layout and change products to 1 column */
+      .layout { grid-template-columns: 1fr; }
+      .products { grid-template-columns: 1fr; gap:18px; }
+      .sidebar { margin-top:18px; border-left:0; border-top:1px solid var(--border); padding-top:18px; }
+      .controls select { min-width:120px; }
+      .badge { left:8px; top:8px; padding:5px 7px; font-size:12px; }
+    }
+
+    /* Accessibility focus */
+    button:focus, input:focus, select:focus, a:focus { outline: 3px solid rgba(246,166,35,0.18); outline-offset:2px; }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <h2 class="page-title">Food Shop Grid</h2>
+
+    <!-- Controls -->
+    <div class="controls" role="region" aria-label="Sort and Show Controls">
+      <div class="control">
+        <span style="color:var(--muted);font-weight:600">Sort By :</span>
+        <select aria-label="Sort products">
+          <option>Newest</option>
+          <option>Popularity</option>
+          <option>Price: Low to High</option>
+          <option>Price: High to Low</option>
+        </select>
+      </div>
+
+      <div class="control">
+        <span style="color:var(--muted);font-weight:600">Show :</span>
+        <select aria-label="Show per page">
+          <option>Default</option>
+          <option>12 per page</option>
+          <option>24 per page</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Main layout: products + sidebar -->
+    <div class="layout">
+      <!-- PRODUCTS GRID -->
+      <main class="products" aria-live="polite" aria-label="Product list">
+
+        <!-- CARD 1 -->
+        <article class="card">
+          <div class="media">
+            <img src="94081ed7b1dd8833b5511b01e2d2bcb788cff0ba.jpg" alt="Fresh Lime Salad">
+            <div class="media-overlay">
+              <button title="View">👁</button>
+              <button title="Add to cart">🛒</button>
+            </div>
+          </div>
+          <div class="info">
+            <h3 class="title">Fresh Lime</h3>
+            <div class="price-row">
+              <span class="price-normal">$38.00</span>
+              <span class="old">$45.00</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- CARD 2 (sale) -->
+        <article class="card">
+          <div class="media">
+            <img src="da04ac294b26bea2f0204896af43be472b92103e (1).jpg" alt="Chocolate Muffin">
+            <div class="badge">Sale</div>
+            <div class="media-overlay">
+              <button title="View">👁</button>
+              <button title="Add to cart">🛒</button>
+            </div>
+          </div>
+          <div class="info">
+            <h3 class="title">Chocolate Muffin</h3>
+            <div class="price-row">
+              <span class="price-normal">$28.00</span>
+              <span class="old">$32.00</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- CARD 3 -->
+        <article class="card">
+          <div class="media">
+            <img src="dd50b096eef6ea1c9dc8d1c018019a6d4123e8dd.jpg" alt="Burger">
+            <div class="media-overlay">
+              <button title="View">👁</button>
+              <button title="Add to cart">🛒</button>
+            </div>
+          </div>
+          <div class="info">
+            <h3 class="title">Burger</h3>
+            <div class="price-row">
+              <span class="price-normal">$21.00</span>
+              <span class="old">$45.00</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- CARD 4 -->
+        <article class="card">
+          <div class="media">
+            <img src="b45c4e2574ddb0b16990ec187721380b63f9f1f2.jpg" alt="Country Burger">
+            <div class="media-overlay">
+              <button title="View">👁</button>
+              <button title="Add to cart">🛒</button>
+            </div>
+          </div>
+          <div class="info">
+            <h3 class="title">Country Burger</h3>
+            <div class="price-row">
+              <span class="price-normal">$45.00</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- CARD 5 -->
+        <article class="card">
+          <div class="media">
+            <img src="5235416544401eb111411b6f79133895e3d7920c.jpg" alt="Drink">
+            <div class="media-overlay">
+              <button title="View">👁</button>
+              <button title="Add to cart">🛒</button>
+            </div>
+          </div>
+          <div class="info">
+            <h3 class="title">Drink</h3>
+            <div class="price-row">
+              <span class="price-normal">$23.00</span>
+              <span class="old">$45.00</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- CARD 6 -->
+        <article class="card">
+          <div class="media">
+            <img src="a7b8cb523d6ec4869bdf6bd9fd4ea56a52a7574b.jpg" alt="Pizza">
+            <div class="media-overlay">
+              <button title="View">👁</button>
+              <button title="Add to cart">🛒</button>
+            </div>
+          </div>
+          <div class="info">
+            <h3 class="title">Pizza</h3>
+            <div class="price-row">
+              <span class="price-normal">$43.00</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- CARD 7 -->
+        <article class="card">
+          <div class="media">
+            <img src="f52a6a55e3852760d3e00f2379924e48ade43e05.jpg" alt="Cheese Butter">
+            <div class="media-overlay">
+              <button title="View">👁</button>
+              <button title="Add to cart">🛒</button>
+            </div>
+          </div>
+          <div class="info">
+            <h3 class="title">Cheese Butter</h3>
+            <div class="price-row">
+              <span class="price-normal">$10.00</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- CARD 8 -->
+        <article class="card">
+          <div class="media">
+            <img src="20790ec0816231ab590e6e88ff3014a0538d22df.jpg" alt="Sandwiches">
+            <div class="media-overlay">
+              <button title="View">👁</button>
+              <button title="Add to cart">🛒</button>
+            </div>
+          </div>
+          <div class="info">
+            <h3 class="title">Sandwiches</h3>
+            <div class="price-row">
+              <span class="price-normal">$25.00</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- CARD 9 (sale) -->
+        <article class="card">
+          <div class="media">
+            <img src="7d313c5f0616a5fb76a0492fb6766cafcf14d3e6.jpg" alt="Chicken Chup">
+            <div class="badge">Sale</div>
+            <div class="media-overlay">
+              <button title="View">👁</button>
+              <button title="Add to cart">🛒</button>
+            </div>
+          </div>
+          <div class="info">
+            <h3 class="title">Chicken Chup</h3>
+            <div class="price-row">
+              <span class="price-normal">$12.00</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- REPEAT A GROUP (to mimic the second row like screenshot) -->
+        <article class="card">
+          <div class="media">
+            <img src="b45c4e2574ddb0b16990ec187721380b63f9f1f2.jpg" alt="Country Burger">
+            <div class="media-overlay">
+              <button title="View">👁</button>
+              <button title="Add to cart">🛒</button>
+            </div>
+          </div>
+          <div class="info">
+            <h3 class="title">Country Burger</h3>
+            <div class="price-row">
+              <span class="price-normal">$45.00</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="media">
+            <img src="5235416544401eb111411b6f79133895e3d7920c.jpg" alt="Drink">
+            <div class="media-overlay">
+              <button title="View">👁</button>
+              <button title="Add to cart">🛒</button>
+            </div>
+          </div>
+          <div class="info">
+            <h3 class="title">Drink</h3>
+            <div class="price-row">
+              <span class="price-normal">$23.00</span>
+              <span class="old">$45.00</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="media">
+            <img src="a7b8cb523d6ec4869bdf6bd9fd4ea56a52a7574b.jpg" alt="Pizza">
+            <div class="media-overlay">
+              <button title="View">👁</button>
+              <button title="Add to cart">🛒</button>
+            </div>
+          </div>
+          <div class="info">
+            <h3 class="title">Pizza</h3>
+            <div class="price-row">
+              <span class="price-normal">$43.00</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Two more to fill similar to screenshot -->
+        <article class="card">
+          <div class="media">
+            <img src="f52a6a55e3852760d3e00f2379924e48ade43e05.jpg" alt="Cheese Butter">
+            <div class="media-overlay">
+              <button title="View">👁</button>
+              <button title="Add to cart">🛒</button>
+            </div>
+          </div>
+          <div class="info">
+            <h3 class="title">Cheese Butter</h3>
+            <div class="price-row">
+              <span class="price-normal">$10.00</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="media">
+            <img src="20790ec0816231ab590e6e88ff3014a0538d22df.jpg" alt="Sandwiches">
+            <div class="media-overlay">
+              <button title="View">👁</button>
+              <button title="Add to cart">🛒</button>
+            </div>
+          </div>
+          <div class="info">
+            <h3 class="title">Sandwiches</h3>
+            <div class="price-row">
+              <span class="price-normal">$25.00</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="media">
+            <img src="7d313c5f0616a5fb76a0492fb6766cafcf14d3e6.jpg" alt="Chicken Chup">
+            <div class="media-overlay">
+              <button title="View">👁</button>
+              <button title="Add to cart">🛒</button>
+            </div>
+          </div>
+          <div class="info">
+            <h3 class="title">Chicken Chup</h3>
+            <div class="price-row">
+              <span class="price-normal">$12.00</span>
+            </div>
+          </div>
+        </article>
+
+      </main>
+
+      <!-- SIDEBAR -->
+      <aside class="sidebar" aria-label="Sidebar">
+        <div class="search widget" role="search">
+          <input type="search" placeholder="Search Product..." aria-label="Search products">
+          <button aria-label="Search">🔍</button>
+        </div>
+
+        <div class="widget categories" aria-label="Categories">
+          <h4>Category</h4>
+          <label><input type="checkbox"> Sandwiches</label>
+          <label><input type="checkbox"> Burger</label>
+          <label><input type="checkbox"> Chicken Chup</label>
+          <label><input type="checkbox"> Drink</label>
+          <label><input type="checkbox"> Pizza</label>
+          <label><input type="checkbox"> Thai</label>
+          <label><input type="checkbox"> Non Veg</label>
+          <label><input type="checkbox"> Uncategorized</label>
+        </div>
+
+        <div class="ad-card widget" aria-hidden="true">
+          <img src="8c9b0bab73c27ca26255846085f5f5b83f0d9b09.jpg" alt="Ad image">
+          <div>
+            <div style="font-weight:700">Perfect Taste</div>
+            <div style="font-size:13px;color:rgba(255,255,255,0.85)">Classic Restaurant</div>
+            <div style="margin-top:8px;font-weight:700">$45.00</div>
+          </div>
+        </div>
+
+        <div class="widget">
+          <h4>Filter By Price</h4>
+          <div class="price-range">From $0 to $8000</div>
+          <div style="height:10px;background:#f5f5f5;border-radius:6px;margin-top:8px;overflow:hidden">
+            <div style="width:45%;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-dark))"></div>
+          </div>
+        </div>
+
+        <div class="widget">
+          <h4>Latest Products</h4>
+          <div class="latest-item">
+            <img src="3ab6986775e03131d5fe421c6f7c30a18233d4a5.jpg" alt="pizza">
+            <div class="meta"><div class="name">Pizza</div><div>$35.00</div></div>
+          </div>
+
+          <div class="latest-item">
+            <img src="3ab6986775e03131d5fe421c6f7c30a18233d4a5.jpg" alt="cupcake">
+            <div class="meta"><div class="name">Cupcake</div><div>$30.00</div></div>
+          </div>
+
+          <div class="latest-item">
+            <img src="3ab6986775e03131d5fe421c6f7c30a18233d4a5.jpg" alt="cookies">
+            <div class="meta"><div class="name">Cookies</div><div>$15.00</div></div>
+          </div>
+
+          <div class="latest-item">
+            <img src="3ab6986775e03131d5fe421c6f7c30a18233d4a5.jpg" alt="burger">
+            <div class="meta"><div class="name">Burger</div><div>$20.00</div></div>
+          </div>
+        </div>
+
+        <div class="widget">
+          <h4>Product Tags</h4>
+          <div class="tags">
+            <span class="tag">Services</span>
+            <span class="tag">Our Menu</span>
+            <span class="tag">Pizza</span>
+            <span class="tag">Cupcake</span>
+            <span class="tag">Burger</span>
+            <span class="tag">Cookies</span>
+            <span class="tag">Our Shop</span>
+            <span class="tag">Tandoori Chicken</span>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination" role="navigation" aria-label="Pagination">
+      <button aria-label="Previous">«</button>
+      <button aria-label="Page 1">1</button>
+      <button class="active" aria-current="page" aria-label="Page 2">2</button>
+      <button aria-label="Page 3">3</button>
+      <button aria-label="Next">»</button>
+    </div>
+  </div>
+
+  <!-- Support Section -->
+<section class="support">
+    <h2><span>Still</span> You Need Our Support ?</h2>
+    <p>Don’t wait make a smart & logical quote here. Its pretty easy.</p>
+
+    <div class="line"></div>
+
+    <div class="subscribe-box">
+        <input type="email" placeholder="Enter Your Email">
+        <button>Subscribe Now</button>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="footer-container">
+
+        <!-- About -->
+        <div class="footer-box">
+            <h3>About Us.</h3>
+            <p>
+                Corporate clients and leisure travelers has been relying on Groundlink for dependable,
+                safe, and professional chauffeured car service in major cities across World.
+            </p>
+
+            <div class="opening">
+                <div class="icon">⟳</div>
+                <div>
+                    <strong>Opening Hours</strong><br>
+                    Mon - Sat (8.00 - 6.00)<br>
+                    Sunday - Closed
+                </div>
+            </div>
+        </div>
+
+        <!-- Useful Links -->
+        <div class="footer-box">
+            <h3>Useful Links</h3>
+            <ul>
+                <li>About</li>
+                <li>News</li>
+                <li>Partners</li>
+                <li>Team</li>
+                <li>Menu</li>
+                <li>Contact</li>
+            </ul>
+        </div>
+
+        <!-- Help -->
+        <div class="footer-box">
+            <h3>Help?</h3>
+            <ul>
+                <li>FAQ</li>
+                <li>Term & Condition</li>
+                <li>Reporting</li>
+                <li>Documentation</li>
+                <li>Support Policy</li>
+                <li>Privacy</li>
+            </ul>
+        </div>
+
+        <!-- Recent Post -->
+        <div class="footer-box">
+            <h3>Recent Post</h3>
+
+            <div class="post">
+                <img src="img/food1.jpg" alt="">
+                <div>
+                    <p>Is fastfood good for your body?</p>
+                    <span>February 28, 2022</span>
+                </div>
+            </div>
+
+            <div class="post">
+                <img src="img/food2.jpg" alt="">
+                <div>
+                    <p>Change your food habit with organic food</p>
+                    <span>February 28, 2022</span>
+                </div>
+            </div>
+
+            <div class="post">
+                <img src="img/food3.jpg" alt="">
+                <div>
+                    <p>Do you like fastfood for your life?</p>
+                    <span>February 28, 2022</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Footer Bottom -->
+    <div class="footer-bottom">
+        <p>Copyright © 2022 by Ayeman. All Rights Reserved.</p>
+
+        <div class="social-icons">
+            <span>📘</span>
+            <span>🐦</span>
+            <span>📸</span>
+            <span>▶</span>
+            <span>📌</span>
+        </div>
+    </div>
+</footer>
+</body>
+</html>

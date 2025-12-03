@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cart Page</title>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background: #fff;
+        color: #333;
+    }
+
+    .container {
+        width: 90%;
+        max-width: 1200px;
+        margin: 40px auto;
+    }
+
+    h2 {
+        margin-bottom: 20px;
+    }
+
+    .cart-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+        align-items: center;
+        gap: 20px;
+        padding: 10px 0;
+        border-bottom: 1px solid #eee;
+        font-size: 14px;
+    }
+
+    .cart-header {
+        font-weight: bold;
+        border-bottom: 2px solid #eee;
+        padding-bottom: 10px;
+    }
+
+    .product-img {
+        width: 60px;
+        height: 60px;
+        border-radius: 6px;
+        margin-right: 10px;
+        object-fit: cover;
+    }
+
+    .product-info {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .qty-box {
+        display: flex;
+        align-items: center;
+        border: 1px solid #ccc;
+        border-radius: 20px;
+        padding: 5px 10px;
+        width: 80px;
+        justify-content: space-between;
+    }
+
+    .qty-box button {
+        border: none;
+        background: none;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    .remove-btn {
+        font-size: 18px;
+        color: #000;
+        cursor: pointer;
+    }
+
+    .coupon-section, .summary-section {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1.4fr 1fr;
+        gap: 30px;
+        margin-top: 50px;
+    }
+
+    .coupon-card {
+        border: 1px solid #eee;
+        border-radius: 10px;
+        padding: 20px;
+    }
+
+    .coupon-card p {
+        font-size: 13px;
+        color: #777;
+    }
+
+    .coupon-card input {
+        width: 65%;
+        height: 40px;
+        padding: 10px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        margin-right: 10px;
+        outline: none;
+    }
+
+    .apply-btn {
+        padding: 10px 18px;
+        border-radius: 6px;
+        background: #ff9800;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        font-size: 14px;
+    }
+
+    .summary-card {
+        border: 1px solid #eee;
+        border-radius: 10px;
+        padding: 20px;
+    }
+
+    .summary-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 12px;
+    }
+
+    .checkout-btn {
+        width: 100%;
+        background: #ff9800;
+        color: #fff;
+        border: none;
+        padding: 15px;
+        font-size: 16px;
+        border-radius: 6px;
+        margin-top: 20px;
+        cursor: pointer;
+    }
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    
+    <!-- Cart Table Header -->
+    <div class="cart-grid cart-header">
+        <div>Product</div>
+        <div>Price</div>
+        <div>Quantity</div>
+        <div>Total</div>
+        <div>Remove</div>
+    </div>
+
+    <!-- Cart Items -->
+    <div class="cart-grid">
+        <div class="product-info">
+            <img src="dbae966165e940fcfef374c3c3e6db19c32ffc99.jpg" class="product-img">
+            <span>Burger</span>
+        </div>
+        <div>$35.00</div>
+        <div class="qty-box">
+            <button>-</button> 1 <button>+</button>
+        </div>
+        <div>$221.00</div>
+        <div class="remove-btn">×</div>
+    </div>
+
+    <div class="cart-grid">
+        <div class="product-info">
+            <img src="958c1bceeda103fc359ecca700ef841d06c615d0.jpg" class="product-img">
+            <span>Fresh Lime</span>
+        </div>
+        <div>$25.00</div>
+        <div class="qty-box">
+            <button>-</button> 1 <button>+</button>
+        </div>
+        <div>$521.00</div>
+        <div class="remove-btn" style="color:#ff9800;">×</div>
+    </div>
+
+    <div class="cart-grid">
+        <div class="product-info">
+            <img src="2af37678e0d804d94db6d55b5d5a06f8ba554234.jpg" class="product-img">
+            <span>Pizza</span>
+        </div>
+        <div>$15.00</div>
+        <div class="qty-box">
+            <button>-</button> 1 <button>+</button>
+        </div>
+        <div>$421.00</div>
+        <div class="remove-btn">×</div>
+    </div>
+
+    <div class="cart-grid">
+        <div class="product-info">
+            <img src="a0ae1598430e6a5408a35c0c66bab776f52be7a3.jpg" class="product-img">
+            <span>Chocolate Muffin</span>
+        </div>
+        <div>$45.00</div>
+        <div class="qty-box">
+            <button>-</button> 1 <button>+</button>
+        </div>
+        <div>$521.00</div>
+        <div class="remove-btn">×</div>
+    </div>
+
+    <div class="cart-grid">
+        <div class="product-info">
+            <img src="421fab10612a4826cc45b2c54b52075a0241673b.jpg" class="product-img">
+            <span>Cheese Butter</span>
+        </div>
+        <div>$15.00</div>
+        <div class="qty-box">
+            <button>-</button> 1 <button>+</button>
+        </div>
+        <div>$325.00</div>
+        <div class="remove-btn">×</div>
+    </div>
+
+    <!-- Bottom Section -->
+    <div class="coupon-section">
+        
+        <!-- Coupon -->
+        <div class="coupon-card">
+            <h3>Coupon Code</h3>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque diam pellentesque bibendum non.</p>
+            <input type="text" placeholder="Enter Here code">
+            <button class="apply-btn">Apply</button>
+        </div>
+
+        <!-- Summary -->
+        <div>
+            <div class="summary-card">
+                <div class="summary-row">
+                    <span>Cart Subtotal</span><strong>$120.00</strong>
+                </div>
+                <div class="summary-row">
+                    <span>Shipping Charge</span><strong>$80.00</strong>
+                </div>
+                <div class="summary-row">
+                    <span>Total Amount</span><strong>$205.00</strong>
+                </div>
+            </div>
+            
+            <button class="checkout-btn">Proceed to Checkout ⟶</button>
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

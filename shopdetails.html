@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Product Page - Yummy Chicken Chup</title>
+<style>
+    body {
+        margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
+        background: #fff;
+        color: #333;
+    }
+    .container {
+        width: 1200px;
+        margin: 50px auto;
+        display: grid;
+        grid-template-columns: 120px 1fr 1fr;
+        gap: 30px;
+    }
+
+    /* Left Thumbnail Column */
+    .thumbs {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+    .thumbs img {
+        width: 100%;
+        border-radius: 10px;
+        cursor: pointer;
+        object-fit: cover;
+    }
+
+    /* Product Main Image */
+    .main-img img {
+        width: 100%;
+        height: 480px;
+        object-fit: cover;
+        border-radius: 12px;
+    }
+
+    /* Product Details */
+    .details h2 {
+        margin: 0;
+        font-size: 30px;
+        font-weight: bold;
+    }
+    .price {
+        font-size: 28px;
+        font-weight: 700;
+        margin: 20px 0;
+    }
+    .rating {
+        color: #ffb400;
+        font-size: 14px;
+        margin-bottom: 20px;
+    }
+    .in-stock {
+        color: #28a745;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .quantity-section {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin: 20px 0;
+    }
+    .qty-box {
+        border: 1px solid #ccc;
+        display: flex;
+        align-items: center;
+        width: 110px;
+        justify-content: space-between;
+        padding: 5px 10px;
+        border-radius: 8px;
+    }
+    .qty-box button {
+        background: none;
+        border: none;
+        font-size: 20px;
+        cursor: pointer;
+    }
+    .btn-add {
+        background: #ff8c00;
+        padding: 10px 20px;
+        border: none;
+        font-weight: bold;
+        border-radius: 8px;
+        cursor: pointer;
+        color: #fff;
+    }
+
+    .actions {
+        margin: 18px 0;
+    }
+    .actions span {
+        margin-right: 22px;
+        cursor: pointer;
+        font-size: 14px;
+        opacity: 0.8;
+    }
+
+    .info {
+        font-size: 14px;
+        margin: 15px 0;
+        opacity: 0.8;
+    }
+
+    .share {
+        margin-top: 10px;
+    }
+    .share span {
+        margin-right: 12px;
+        cursor: pointer;
+        font-size: 18px;
+    }
+
+    /* Tabs Section */
+    .tabs {
+        width: 1200px;
+        margin: 60px auto;
+    }
+    .tab-buttons {
+        display: flex;
+        gap: 20px;
+        border-bottom: 2px solid #eee;
+    }
+    .tab-buttons button {
+        background: #ff8c00;
+        color: #fff;
+        padding: 12px 25px;
+        border: none;
+        border-radius: 6px 6px 0 0;
+        cursor: pointer;
+    }
+
+    .tab-content {
+        padding: 25px 0;
+        line-height: 1.7;
+        font-size: 15px;
+    }
+    .key-benefits ul {
+        list-style: square;
+        padding-left: 20px;
+    }
+
+    /* Similar Products */
+    .similar {
+        width: 1200px;
+        margin: 60px auto;
+    }
+    .similar h3 {
+        margin-bottom: 25px;
+        font-size: 22px;
+    }
+    .similar-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+    }
+    .product-card {
+        border-radius: 12px;
+        background: #fff;
+        padding: 10px;
+        text-align: center;
+    }
+    .product-card img {
+        width: 100%;
+        height: 160px;
+        border-radius: 10px;
+        object-fit: cover;
+    }
+    .product-card p {
+        font-size: 16px;
+        margin: 8px 0;
+    }
+</style>
+</head>
+<body>
+
+<!-- Main Product Section -->
+<div class="container">
+    
+    <!-- Left Thumbnails -->
+    <div class="thumbs">
+        <img src="c3a2d77b0f075eb1d335305aaa92862ab18a3cb8.jpg" />
+        <img src="48c033277e449194ff1bd3ddacf7f849e76b68f4.jpg" />
+        <img src="b3541c1701139b4b80104920d17307cc3c5cd3c1.jpg" />
+        <img src="143db147f381590fda25256c00cbfa6105afa496.jpg" />
+    </div>
+
+    <!-- Main Product Image -->
+    <div class="main-img">
+        <img src="eb74454beb94364126821b5afdd60d1554f43624.jpg" />
+    </div>
+
+    <!-- Product Details Info -->
+    <div class="details">
+        <p class="in-stock">In Stock</p>
+        <h2>Yummy Chicken Chup</h2>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vulputate.</p>
+
+        <p class="price">54.00$</p>
+        <p class="rating">⭐⭐⭐⭐⭐ &nbsp; 5.0 Rating &nbsp; | &nbsp; 22 Reviews</p>
+
+        <div class="quantity-section">
+            <div class="qty-box">
+                <button>-</button>
+                <span>1</span>
+                <button>+</button>
+            </div>
+            <button class="btn-add">Add to cart</button>
+        </div>
+
+        <div class="actions">
+            <span>♡ Add to Wishlist</span>
+            <span>↔ Compare</span>
+        </div>
+
+        <div class="info">
+            Category: Pizza<br>
+            Tag: Our Shop
+        </div>
+
+        <div class="share">
+            Share:
+            <span>●</span>
+            <span>●</span>
+            <span>●</span>
+            <span>●</span>
+        </div>
+    </div>
+</div>
+
+
+<!-- Tabs -->
+<div class="tabs">
+    <div class="tab-buttons">
+        <button>Description</button>
+        <button style="background:#ddd;color:#000;">Reviews (24)</button>
+    </div>
+
+    <div class="tab-content">
+        <p>Nam tristique porta ligula, vel viverra sem efficitur et. Vestibulum suscipit cursus.</p>
+
+        <p>Interdum sem hendrerit volutpat. Vivamus vel nunc tortor. Nulla facilisi.</p>
+
+        <div class="key-benefits">
+            <h4>Key Benefits</h4>
+            <ul>
+                <li>Lorem ipsum dolor sit amet</li>
+                <li>Maecenas ullamcorper est</li>
+                <li>Vestibulum non massa ut</li>
+                <li>Etiam nec massa et lectus</li>
+                <li>Mauris eget eros magna</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+<!-- Similar Products -->
+<div class="similar">
+    <h3>Similar Products</h3>
+
+    <div class="similar-grid">
+        <div class="product-card">
+            <img src="94081ed7b1dd8833b5511b01e2d2bcb788cff0ba.jpg" />
+            <p>Fresh Lime</p>
+            <p>$38.00</p>
+        </div>
+
+        <div class="product-card">
+            <img src="da04ac294b26bea2f0204896af43be472b92103e (1).jpg" />
+            <p>Chocolate Muffin</p>
+            <p>$28.00</p>
+        </div>
+
+        <div class="product-card">
+            <img src="dd50b096eef6ea1c9dc8d1c018019a6d4123e8dd.jpg" />
+            <p>Burger</p>
+            <p>$39.00</p>
+        </div>
+
+        <div class="product-card">
+            <img src="94081ed7b1dd8833b5511b01e2d2bcb788cff0ba.jpg" />
+            <p>Fresh Lime</p>
+            <p>$38.00</p>
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>
