@@ -467,3 +467,135 @@
         text-align: center;
     }
 }
+
+/* ================= MOBILE RESPONSIVENESS ================= */
+
+@media (max-width: 992px) {
+
+  /* HERO */
+  .hero {
+    height: auto;
+    min-height: 75vh;
+  }
+
+  .navbar {
+    flex-direction: column;
+    gap: 15px;
+    padding: 15px;
+    text-align: center;
+  }
+
+  .nav-links {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+  }
+
+  .hero-text {
+    position: relative;
+    bottom: 0;
+    left: 0;
+    padding: 20px;
+    text-align: center;
+  }
+
+  .hero-text h1 {
+    font-size: 32px;
+    text-align: center;
+  }
+
+  /* MENU SECTION */
+  .menu-block {
+    grid-template-columns: 1fr;
+    padding: 25px;
+  }
+
+  .left-img img,
+  .right-img img {
+    width: 100%;
+    height: auto;
+  }
+
+  .menu-line {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .menu-line h3 {
+    font-size: 16px;
+  }
+
+  /* STATS */
+  .stats {
+    flex-direction: column;
+    gap: 30px;
+    text-align: center;
+  }
+
+  /* PARTNERS */
+  .partner-logos {
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  .partner-logos img {
+    width: 100px;
+    height: auto;
+  }
+
+  /* SUPPORT */
+  .support {
+    flex-direction: column;
+    gap: 20px;
+    padding: 30px 15px;
+  }
+
+  .subscribe-box {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .subscribe-box input,
+  .subscribe-box button {
+    width: 100%;
+  }
+
+  /* SHOP PAGE LAYOUT */
+  .container {
+    grid-template-columns: 1fr;
+  }
+
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+  }
+
+}
+
+/* PHONE SIZE */
+@media (max-width: 500px) {
+
+  .product-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-text h1 {
+    font-size: 26px;
+  }
+
+  .logo {
+    font-size: 22px;
+  }
+
+  .nav-icons span {
+    font-size: 18px;
+  }
+
+  .footer {
+    padding: 30px 15px;
+  }
+
+  .partners {
+    padding: 40px 20px;
+  }
+}
